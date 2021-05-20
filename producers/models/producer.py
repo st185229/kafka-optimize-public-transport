@@ -3,6 +3,7 @@ import logging
 import time
 
 from confluent_kafka.admin import AdminClient, NewTopic
+from confluent_kafka.avro import AvroProducer
 
 logger = logging.getLogger(__name__)
 
@@ -72,9 +73,6 @@ class Producer:
         #
         self.broker_properties = {
             "bootstrap.servers": "PLAINTEXT://localhost:9092"
-            # TODO
-            # TODO
-            # TODO
         }
 
         # If the topic does not already exist, try to create it
@@ -83,8 +81,10 @@ class Producer:
             Producer.existing_topics.add(self.topic_name)
 
         # TODO: Configure the AvroProducer
-        # self.producer = AvroProducer(
-        # )
+
+        self.avroProducer = AvroProducer(
+            {"bootstrap.servers": "localhost:9092", "schema.registry.url": "http://localhost:8081"},
+            default_key_schema=self.key_schema, default_value_schema=self.key_schema)
 
     def create_topic(self):
         """Creates the producer topic if it does not already exist"""
@@ -106,6 +106,8 @@ class Producer:
         """Prepares the producer for exit by cleaning up the producer"""
         logger.info("producer close ")
         Producer.existing_topics.discard(self.topic_name)
+        if self.avroProducer.len() > 0:
+            self.avroProducer.flush(10)
         #
         #
         # TODO: Write cleanup code for the Producer here

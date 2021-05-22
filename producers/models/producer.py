@@ -1,7 +1,6 @@
 """Producer base-class providing common utilities and functionality"""
 import logging
 import time
-
 from confluent_kafka.admin import AdminClient, NewTopic
 from confluent_kafka.avro import AvroProducer
 
@@ -31,7 +30,6 @@ def create_topic(client, topic_name):
             )
         ]
     )
-
     for topic, future in futures.items():
         try:
             future.result()
@@ -64,29 +62,22 @@ class Producer:
         self.value_schema = value_schema
         self.num_partitions = num_partitions
         self.num_replicas = num_replicas
-
-        #
-        #
-        # TODO: Configure the broker properties below. Make sure to reference the project README
-        # and use the Host URL for Kafka and Schema Registry!
-        #
-        #
         self.broker_properties = {
-            "bootstrap.servers": "PLAINTEXT://localhost:9092"
+            "bootstrap.servers": "localhost:9092"
         }
-
         # If the topic does not already exist, try to create it
         if self.topic_name not in Producer.existing_topics:
             self.create_topic()
             Producer.existing_topics.add(self.topic_name)
-
-        # TODO: Configure the AvroProducer
-
+        # Configuration of AvroProducer
+        #  The below constructor seems to be legacy as per doc below
+        #  https://docs.confluent.io/platform/current/clients/confluent-kafka-python/html/index.html#avroproducer-legacy
         self.avroProducer = AvroProducer(
             {"bootstrap.servers": "localhost:9092", "schema.registry.url": "http://localhost:8081"},
-            default_key_schema=self.key_schema, default_value_schema=self.key_schema)
+            default_key_schema=self.key_schema, default_value_schema=self.value_schema)
 
     def create_topic(self):
+        logger.info(f"Topic to be created  {self.topic_name}")
         """Creates the producer topic if it does not already exist"""
         client = AdminClient(self.broker_properties)
         exists = topic_exists(client, self.topic_name)
@@ -95,12 +86,6 @@ class Producer:
             create_topic(client, self.topic_name)
         else:
             logger.info(f"Topic {self.topic_name} already exists")
-        #
-        #
-        # TODO: Write code that creates the topic for this producer if it does not already exist on
-        # the Kafka Broker.
-        #
-        #
 
     def close(self):
         """Prepares the producer for exit by cleaning up the producer"""
@@ -108,13 +93,10 @@ class Producer:
         Producer.existing_topics.discard(self.topic_name)
         if self.avroProducer.len() > 0:
             self.avroProducer.flush(10)
-        #
-        #
-        # TODO: Write cleanup code for the Producer here
-        #
-        #
 
     @property
     def time_millis(self):
         """Use this function to get the key for Kafka Events"""
         return int(round(time.time() * 1000))
+
+

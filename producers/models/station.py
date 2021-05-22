@@ -1,5 +1,6 @@
 """Methods pertaining to loading and configuring CTA "L" station data."""
 import logging
+import constants
 from pathlib import Path
 
 from confluent_kafka import avro
@@ -25,22 +26,16 @@ class Station(Producer):
                 .replace("-", "_")
                 .replace("'", "")
         )
-        #
-        #
-        # TODO: Complete the below by deciding on a topic name, number of partitions, and number of
-        # replicas
-        #
-        #
-        topic_name = f"{station_name}"  # TODO: Come up with a better topic name
+
+        # producer topic name
+        topic_name = constants.station_topic_name
         super().__init__(
             topic_name,
             key_schema=Station.key_schema,
             value_schema=Station.value_schema,
-            num_partitions=2,
-            num_replicas=1,
-            # TODO: value_schema=Station.value_schema, # TODO: Uncomment once schema is defined
-            # TODO: num_partitions=???,
-            # TODO: num_replicas=???,
+            num_partitions=constants.num_partitions,
+            num_replicas=constants.num_replicas,
+
         )
 
         self.station_id = int(station_id)
@@ -53,11 +48,7 @@ class Station(Producer):
 
     def run(self, train, direction, prev_station_id, prev_direction):
         """Simulates train arrivals at this station"""
-        #
-        #
-        # TODO: Complete this function by producing an arrival message to Kafka
-        #
-        #
+
         logger.info("arrival kafka integration incomplete - skipping")
         self.producer.produce(
             topic=self.topic_name,

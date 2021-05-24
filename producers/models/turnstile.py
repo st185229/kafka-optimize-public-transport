@@ -1,13 +1,12 @@
 """Creates a turnstile data producer"""
 import logging
+import constants
 from pathlib import Path
 
 from confluent_kafka import avro
 
 from models.producer import Producer
 from models.turnstile_hardware import TurnstileHardware
-
-import constants
 
 logger = logging.getLogger(__name__)
 
@@ -29,8 +28,9 @@ class Turnstile(Producer):
                 .replace("'", "")
         )
 
+        topic_name = constants.Constants.turnstiles_topic_name
         super().__init__(
-            topic_name=self.topic_name,
+            topic_name,
             key_schema=Turnstile.key_schema,
             value_schema=Turnstile.value_schema,
             num_replicas=1,
@@ -38,7 +38,7 @@ class Turnstile(Producer):
         )
         self.station = station
         self.turnstile_hardware = TurnstileHardware(station)
-        self.topic_name = constants.turnstiles_topic_name
+        self.topic_name = constants.Constants.turnstiles_topic_name
 
     def run(self, timestamp, time_step):
         """Simulates riders entering through the turnstile."""

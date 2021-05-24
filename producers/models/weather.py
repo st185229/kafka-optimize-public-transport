@@ -2,13 +2,14 @@
 import json
 import logging
 import random
+import constants
 from enum import IntEnum
 from pathlib import Path
 
 import requests
 from models.producer import Producer
 
-import constants
+
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +21,7 @@ class Weather(Producer):
         "status", "sunny partly_cloudy cloudy windy precipitation", start=0
     )
 
-    rest_proxy_url = constants.rest_proxy_url
+    rest_proxy_url = constants.Constants.rest_proxy_url
 
     key_schema = None
     value_schema = None
@@ -31,7 +32,7 @@ class Weather(Producer):
     def __init__(self, month):
 
         super().__init__(
-            topic_name=constants.weather_topic_name,
+            topic_name=constants.Constants.weather_topic_name,
             key_schema=Weather.key_schema,
             value_schema=Weather.value_schema,
             num_partitions=1,

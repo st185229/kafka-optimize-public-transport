@@ -8,8 +8,8 @@ import constants
 
 logger = logging.getLogger(__name__)
 
-KAFKA_CONNECT_URL = constants.KAFKA_CONNECT_URL
-CONNECTOR_NAME = constants.KAFKA_CONNECTOR_NAME
+KAFKA_CONNECT_URL = constants.Constants.KAFKA_CONNECT_URL
+CONNECTOR_NAME = constants.Constants.KAFKA_CONNECTOR_NAME
 
 
 def configure_connector():

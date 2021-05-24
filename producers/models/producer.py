@@ -94,9 +94,10 @@ class Producer:
         if self.avroProducer.len() > 0:
             self.avroProducer.flush(10)
 
-    @property
     def time_millis(self):
         """Use this function to get the key for Kafka Events"""
         return int(round(time.time() * 1000))
 
-
+    def produce(self, topic, key, value):
+        self.avroProducer.produce(topic=topic, key=key, value=value, key_schema=self.key_schema,
+                                  value_schema=self.value_schema)

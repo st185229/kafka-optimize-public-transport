@@ -28,13 +28,13 @@ class Station(Producer):
         )
 
         # producer topic name
-        topic_name = constants.station_topic_name
+        topic_name = constants.Constants.station_topic_name
         super().__init__(
             topic_name,
             key_schema=Station.key_schema,
             value_schema=Station.value_schema,
-            num_partitions=constants.num_partitions,
-            num_replicas=constants.num_replicas,
+            num_partitions=constants.Constants.num_partitions,
+            num_replicas=constants.Constants.num_replicas,
 
         )
 
@@ -50,7 +50,7 @@ class Station(Producer):
         """Simulates train arrivals at this station"""
 
         logger.info("arrival kafka integration incomplete - skipping")
-        self.producer.produce(
+        self.produce(
             topic=self.topic_name,
             key={"timestamp": self.time_millis()},
             value={
@@ -61,7 +61,7 @@ class Station(Producer):
                 "train_status": train.status.name,
                 "prev_station_id": prev_station_id,
                 "prev_direction": prev_direction
-            },
+            }
         )
 
     def __str__(self):

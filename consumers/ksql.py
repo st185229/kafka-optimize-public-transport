@@ -4,7 +4,7 @@ import logging
 
 import requests
 
-import constants
+from consumers import constants
 import topic_check
 
 
@@ -28,7 +28,7 @@ CREATE TABLE turnstile (
     station_name VARCHAR,
     line VARCHAR
 ) WITH (
-    KAFKA_TOPIC= '{constants.turnstiles_topic_name}',
+    KAFKA_TOPIC= '{constants.Constants.turnstiles_topic_name}',
     VALUE_FORMAT='AVRO',
     KEY='station_id'
 );

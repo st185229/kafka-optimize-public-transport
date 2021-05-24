@@ -4,6 +4,7 @@ from dataclasses import dataclass
 
 import faust
 
+import constants
 
 logger = logging.getLogger(__name__)
 
@@ -31,32 +32,24 @@ class TransformedStation(faust.Record):
     line: str
 
 
-# TODO: Define a Faust Stream that ingests data from the Kafka Connect stations topic and
+#   Define a Faust Stream that ingests data from the Kafka Connect stations topic and
 #   places it into a new topic with only the necessary information.
-app = faust.App("stations-stream", broker="kafka://localhost:9092", store="memory://")
-# TODO: Define the input Kafka Topic. Hint: What topic did Kafka Connect output to?
-topic = app.topic("com.cta.stations.data.1.stations", value_type=Station)
-# TODO: Define the output Kafka Topic
-out_topic = app.topic("org.udacity.chicago.cta.stations.table.1", partitions=1, value_type=TransformedStation)
-# TODO: Define a Faust Table
-#table = app.Table(
-#    # "TODO",
-#    # default=TODO,
-#    partitions=1,
-#    changelog_topic=out_topic,
-#)
+app = faust.App("stations-stream", broker=f"kafka://{constants.bootstrap_server}", store="memory://")
+# Define the input Kafka Topic. Hint: What topic did Kafka Connect output to?
+topic = app.topic(constants.station_topic_name, value_type=Station)
+#  Define the output Kafka Topic
+out_topic = app.topic(constants.station_faust_out_topic_name, partitions=1, value_type=TransformedStation)
+# Define a Faust Table
 table = app.Table(
-   "com.udacity.faust.station.table.1",
-   default=TransformedStation,
-   partitions=1,
-   changelog_topic=out_topic,
-   value_type=TransformedStation
+    constants.station_faust_out_table_name,
+    default=TransformedStation,
+    partitions=1,
+    changelog_topic=out_topic,
+    value_type=TransformedStation
 )
-
-
 #
 #
-# TODO: Using Faust, transform input `Station` records into `TransformedStation` records. Note that
+# Using Faust, transform input `Station` records into `TransformedStation` records. Note that
 # "line" is the color of the station. So if the `Station` record has the field `red` set to true,
 # then you would set the `line` of the `TransformedStation` record to the string `"red"`
 #

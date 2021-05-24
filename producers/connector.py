@@ -4,10 +4,12 @@ import logging
 
 import requests
 
+import constants
+
 logger = logging.getLogger(__name__)
 
-KAFKA_CONNECT_URL = "http://localhost:8083/connectors"
-CONNECTOR_NAME = "stations"
+KAFKA_CONNECT_URL = constants.KAFKA_CONNECT_URL
+CONNECTOR_NAME = constants.KAFKA_CONNECTOR_NAME
 
 
 def configure_connector():
@@ -59,7 +61,7 @@ def configure_connector():
         ), )
     try:
         resp.raise_for_status()
-    except:
+    except Exception as e:
         logger.error(f"failed creating connector: code: {resp.stat_code}, content: {json.dumps(resp.json())}")
         exit(1)
 

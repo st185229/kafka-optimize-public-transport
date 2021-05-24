@@ -8,6 +8,8 @@ from pathlib import Path
 import requests
 from models.producer import Producer
 
+import constants
+
 logger = logging.getLogger(__name__)
 
 
@@ -18,7 +20,7 @@ class Weather(Producer):
         "status", "sunny partly_cloudy cloudy windy precipitation", start=0
     )
 
-    rest_proxy_url = "http://localhost:8082"
+    rest_proxy_url = constants.rest_proxy_url
 
     key_schema = None
     value_schema = None
@@ -29,7 +31,7 @@ class Weather(Producer):
     def __init__(self, month):
 
         super().__init__(
-            topic_name="com.udacity.transport.weather",
+            topic_name=constants.weather_topic_name,
             key_schema=Weather.key_schema,
             value_schema=Weather.value_schema,
             num_partitions=1,
@@ -82,8 +84,8 @@ class Weather(Producer):
         )
         try:
             resp.raise_for_status()
-        except:
-            logger.error("Unable to send data to REST proxy")
+        except Exception as e:
+            logger.error(f"Unable to send data to REST proxy due to error {e}")
 
         logger.debug(
             "sent weather data to kafka, temp: %s, status: %s",

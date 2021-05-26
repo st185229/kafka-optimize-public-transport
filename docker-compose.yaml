@@ -138,3 +138,4 @@ services:
     volumes:
     - ./producers/data/cta_stations.csv:/tmp/cta_stations.csv
     - ./load_stations.sql:/docker-entrypoint-initdb.d/load_stations.sql
+    - ./postgres.conf:/etc/postgresql/postgresql.conf

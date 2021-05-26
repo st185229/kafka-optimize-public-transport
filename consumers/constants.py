@@ -1,5 +1,5 @@
 class Constants:
-    station_topic_name = "com.chicago.transport.arrival.stations"
+    station_topic_name = "com.chicago.transport.arrival.stations."
     station_faust_out_topic_name = "org.chicago.transport.stations.table.out"
     station_faust_out_table_name = "com.chicago.transport.stations.faust.out"
     num_partitions = 2

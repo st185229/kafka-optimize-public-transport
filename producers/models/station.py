@@ -1,5 +1,7 @@
 """Methods pertaining to loading and configuring CTA "L" station data."""
 import logging
+from enum import IntEnum
+
 import constants
 from pathlib import Path
 
@@ -39,17 +41,25 @@ class Station(Producer):
         )
 
         self.station_id = int(station_id)
-        self.color = color
+        # self.color = color
         self.dir_a = direction_a
         self.dir_b = direction_b
         self.a_train = None
         self.b_train = None
+        colours = IntEnum("colors", "blue green red", start=0)
+        if colours.red == color:
+            self.color = "red"
+        elif colours.blue == color:
+            self.color = "blue"
+        elif colours.green == color:
+            self.color = "green"
+        else:
+            self.color = "yellow"
         self.turnstile = Turnstile(self)
 
     def run(self, train, direction, prev_station_id, prev_direction):
         """Simulates train arrivals at this station"""
 
-        logger.info("arrival kafka integration incomplete - skipping")
         self.produce(
             topic=self.topic_name,
             key={"timestamp": self.time_millis()},

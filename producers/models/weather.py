@@ -70,6 +70,7 @@ class Weather(Producer):
         logger.info("weather kafka proxy integration ")
         resp = requests.post(
 
+            f"{constants.Constants.rest_proxy_url}topics/{constants.Constants.weather_topic_name}",
             headers={"Content-Type": "application/vnd.kafka.avro.v2+json"},
             data=json.dumps(
                 {

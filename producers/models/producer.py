@@ -91,8 +91,7 @@ class Producer:
         """Prepares the producer for exit by cleaning up the producer"""
         logger.info("producer close ")
         Producer.existing_topics.discard(self.topic_name)
-        if self.avroProducer.len() > 0:
-            self.avroProducer.flush(10)
+        self.avroProducer.flush(10)
 
     def time_millis(self):
         """Use this function to get the key for Kafka Events"""

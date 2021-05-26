@@ -39,7 +39,7 @@ def configure_connector():
                     "mode": "incrementing",
                     "incrementing.column.name": "stop_id",
                     "table.whitelist": "stations",
-                    "connection.url": "jdbc:postgresql://localhost:5432/cta",
+                    "connection.url": "jdbc:postgresql://postgres:5432/cta",
                     "connection.user": "cta_admin",
                     "connection.password": "chicago",
                     "poll.interval.ms": "3600000",

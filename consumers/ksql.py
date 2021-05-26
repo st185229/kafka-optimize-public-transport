@@ -4,14 +4,14 @@ import logging
 
 import requests
 
-from consumers import constants
+import constants
 import topic_check
 
 
 logger = logging.getLogger(__name__)
 
 
-KSQL_URL = constants.KSQL_URL
+KSQL_URL = "http://localhost:8088"
 
 #
 # : Complete the following KSQL statements.
@@ -46,10 +46,13 @@ WITH (
 
 def execute_statement():
     """Executes the KSQL statement against the KSQL API"""
+    if topic_check.topic_exists("turnstile") is True:
+        return
     if topic_check.topic_exists("turnstile_summary") is True:
         return
 
-    logging.debug("executing ksql statement...")
+    logging.info("executing ksql statement...")
+    print(f"Statement : {KSQL_STATEMENT}")
 
     resp = requests.post(
         f"{KSQL_URL}/ksql",
@@ -63,7 +66,7 @@ def execute_statement():
     )
 
     # Ensure that a 2XX status code was returned
-    logging.debug(f"KSQL response: {resp}")
+    logging.debug(f"KSQL response: {resp.content}")
     resp.raise_for_status()
 
 

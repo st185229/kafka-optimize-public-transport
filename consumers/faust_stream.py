@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 import faust
 
-from consumers import constants
+import constants
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +34,7 @@ class TransformedStation(faust.Record):
 
 #   Define a Faust Stream that ingests data from the Kafka Connect stations topic and
 #   places it into a new topic with only the necessary information.
-app = faust.App("stations-stream", broker=f"kafka://{constants.Constants.Cbootstrap_server}", store="memory://")
+app = faust.App("stations-stream", broker=f"kafka://{constants.Constants.bootstrap_server}", store="memory://")
 # Define the input Kafka Topic. Hint: What topic did Kafka Connect output to?
 topic = app.topic(f"{constants.Constants.station_topic_name}stations", value_type=Station)
 #  Define the output Kafka Topic

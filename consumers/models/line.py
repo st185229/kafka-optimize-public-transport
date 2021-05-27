@@ -60,15 +60,15 @@ class Line:
 
         topic = message.topic()
         if topic is not None:
-            if constants.Constants.station_faust_out_topic_name in topic:
+            if constants.Constants.STATION_TRANSFORMED_TOPIC in topic:
                 try:
                     value = json.loads(message.value())
                     self._handle_station(value)
                 except Exception as e:
                     logger.fatal("bad station? %s", e)
-        elif constants.Constants.station_topic_name in topic:
+        elif (constants.Constants.TRAIN_ARRIVAL_TOPIC_PREFIX in topic) or ("com.cta.station.arrivals" in topic):
             self._handle_arrival(message)
-        elif constants.Constants.turnstile_summary_topic in topic:
+        elif constants.Constants.STATION_TURNSTILE_SUMMARY in topic:
             json_data = json.loads(message.value())
             station_id = json_data.get("STATION_ID")
             station = self.stations.get(station_id)

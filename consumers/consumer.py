@@ -6,7 +6,7 @@ from confluent_kafka import Consumer
 from confluent_kafka.avro import AvroConsumer
 from tornado import gen
 
-from consumers import constants
+import constants
 
 logger = logging.getLogger(__name__)
 
@@ -38,15 +38,15 @@ class KafkaConsumer:
         #
         self.broker_properties = {
 
-            "bootstrap.servers": constants.bootstrap_server,
-            "group.id": constants.consumer_group_id,
+            "bootstrap.servers": constants.Constants.bootstrap_server,
+            "group.id": constants.Constants.consumer_group_id,
             "default.topic.config": {"auto.offset.reset": "earliest"}
 
         }
 
         # TODO: Create the Consumer, using the appropriate type.
         if is_avro is True:
-            self.broker_properties["schema.registry.url"] = constants.schema_registry_url
+            self.broker_properties["schema.registry.url"] = constants.Constants.schema_registry_url
             self.consumer = AvroConsumer(self.broker_properties)
         else:
             self.consumer = Consumer(self.broker_properties)
@@ -84,7 +84,6 @@ class KafkaConsumer:
         # is retrieved.
         #
         #
-        logger.info("_consume is incomplete - skipping")
         try:
             msg = self.consumer.poll(timeout=self.consume_timeout)
             if msg is None:

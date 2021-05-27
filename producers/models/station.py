@@ -30,7 +30,7 @@ class Station(Producer):
         )
 
         # producer topic name
-        topic_name = constants.Constants.station_topic_name
+        topic_name = constants.Constants.TRAIN_ARRIVAL_TOPIC_PREFIX
         super().__init__(
             topic_name,
             key_schema=Station.key_schema,

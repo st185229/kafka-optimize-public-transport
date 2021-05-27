@@ -28,12 +28,12 @@ CREATE TABLE turnstile (
     station_name VARCHAR,
     line VARCHAR
 ) WITH (
-    KAFKA_TOPIC= '{constants.Constants.turnstiles_topic_name}',
+    KAFKA_TOPIC= '{constants.Constants.STATION_TURNSTILE_TOPIC_PREFIX}',
     VALUE_FORMAT='AVRO',
     KEY='station_id'
 );
 
-CREATE TABLE turnstile_summary
+CREATE TABLE TURNSTILE_SUMMARY
 WITH (
     VALUE_FORMAT='JSON'
 ) AS
@@ -46,9 +46,9 @@ WITH (
 
 def execute_statement():
     """Executes the KSQL statement against the KSQL API"""
-    if topic_check.topic_exists("turnstile") is True:
-        return
-    if topic_check.topic_exists("turnstile_summary") is True:
+    #if topic_check.topic_exists(constants.Constants.STATION_TURNSTILE_TOPIC_PREFIX) is True:
+    #    return
+    if topic_check.topic_exists(constants.Constants.STATION_TURNSTILE_SUMMARY) is True:
         return
 
     logging.info("executing ksql statement...")

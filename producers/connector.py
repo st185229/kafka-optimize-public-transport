@@ -35,7 +35,7 @@ def configure_connector():
                     "value.converter": "org.apache.kafka.connect.json.JsonConverter",
                     "value.converter.schemas.enable": "false",
                     "batch.max.rows": "500",
-                    "topic.prefix": constants.Constants.station_topic_name,
+                    "topic.prefix": constants.Constants.STATION_DATA_TOPIC_PREFIX,
                     "mode": "incrementing",
                     "incrementing.column.name": "stop_id",
                     "table.whitelist": "stations",

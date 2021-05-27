@@ -28,7 +28,7 @@ class Turnstile(Producer):
                 .replace("'", "")
         )
 
-        topic_name = constants.Constants.turnstiles_topic_name
+        topic_name = constants.Constants.STATION_TURNSTILE_TOPIC_PREFIX
         super().__init__(
             topic_name,
             key_schema=Turnstile.key_schema,
@@ -38,7 +38,7 @@ class Turnstile(Producer):
         )
         self.station = station
         self.turnstile_hardware = TurnstileHardware(station)
-        self.topic_name = constants.Constants.turnstiles_topic_name
+        self.topic_name = topic_name
 
     def run(self, timestamp, time_step):
         """Simulates riders entering through the turnstile."""

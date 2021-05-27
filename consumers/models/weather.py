@@ -17,7 +17,6 @@ class Weather:
 
     def process_message(self, message):
         """Handles incoming weather data"""
-        logger.info("weather process_message is incomplete - skipping")
         if constants.Constants.weather_topic_name in message.topic():
             self.temperature = message.value["temperature"]
             self.status = message.value["status"]
